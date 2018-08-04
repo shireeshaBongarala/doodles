@@ -1,0 +1,30 @@
+digraph architecture {
+rankdir = LR;
+
+appointments_service [style = rounded, label = "Appointments", shape = box]
+availability_service [style = rounded, label = "Availability", shape = box]
+consultation_service [style = rounded, label = "Consultations", shape = box]
+
+appointments_database [shape = cylinder, style = filled, label = "database"]
+availability_database [shape = cylinder,  style = filled, label = "database"]
+consultation_database [shape = cylinder,  style = filled, label = "database"]
+
+consultation_service -> consultation_database;
+
+subgraph appointments_service_apps {
+appointments_service -> {appointments_database} [label = "store appointments"];
+appointments_service -> {consultation_service} [label = "Request consultation"];
+
+{rank = sink; appointments_database}
+{rank = same; appointments_service, appointments_database};
+}
+
+subgraph availability_service_apps {
+availability_service -> {availability_database};
+{rank = same; availability_service, availability_database};
+}
+appointments_service -> availability_service [label ="GET availability"]
+}
+
+
+}
